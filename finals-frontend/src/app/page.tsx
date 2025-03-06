@@ -37,9 +37,9 @@ export default function Home() {
 
     return {
       course_and_section,
-      day: start.toLocaleDateString('en-US', { weekday: 'long' }),
-      start: start.toLocaleTimeString('en-US'),
-      end: end.toLocaleTimeString('en-US'),
+      day: start.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }),
+      start: start.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'}),
+      end: end.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'}),
       location,
     }
   });
@@ -66,7 +66,7 @@ export default function Home() {
     },
   ]
   return (
-    <main className="flex min-h-screen flex-col items-center p-10">
+    <main className="flex min-h-screen flex-col items-center pt-10">
       <h1 className="text-4xl font-bold pb-5">Find your finals</h1>
       <DataTable columns={columns} data={finalsData} />
     </main>

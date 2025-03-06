@@ -46,7 +46,7 @@ export function DataTable<TData, TValue>({
   
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col max-w-screen">
     <div className="self-start w-3/4 pb-2">
         <Input
           placeholder="Filter by course"
@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
           }
         />
     </div>
-    <div className="rounded-md border">
+    <div className="rounded-md border w-full">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
