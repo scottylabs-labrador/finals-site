@@ -27,7 +27,7 @@ export default function Home() {
     return <div>Loading...</div>;
   }
   const finalsData = finals?.map(({course, start_time, end_time, location}: FinalsInfo ) => {
-    const course_and_section = course[0] + " " + course[1];
+    const course_and_section = course;
     const start = new Date(0)
     start.setUTCSeconds(start_time)
     const end = new Date(0)
