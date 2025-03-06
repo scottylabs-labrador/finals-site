@@ -2,8 +2,6 @@
 
 import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { Input } from "@/components/ui/input";
-import { Table } from "@/components/ui/table";
 import { DataTable } from "@/components/datatable";
 import { ColumnDef } from "@tanstack/react-table";
 
