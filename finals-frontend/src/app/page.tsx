@@ -7,7 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 type FinalsInfo = {
   _id: string;
-  course: string[];
+  course: string;
   start_time: number;
   end_time: number;
   location: string;
