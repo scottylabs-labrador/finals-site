@@ -1,14 +1,3 @@
-"use client"
-
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
-
 import {
   Table,
   TableBody,
@@ -17,45 +6,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import React from "react"
-import { Input } from "./ui/input"
+import { ColumnDef, flexRender, Table as TableType } from "@tanstack/react-table"
 
 interface DataTableProps<TData, TValue> {
+  table: TableType<TData>
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-        []
-        )
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-        columnFilters,
-    },
-  })
-
-  
-
-  return (
-    <div className="flex flex-col max-w-screen">
-    <div className="self-start w-3/4 pb-2">
-        <Input
-          placeholder="Filter by course"
-          value={(table.getColumn("course_and_section")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("course_and_section")?.setFilterValue(event.target.value)
-          }
-        />
-    </div>
+function DataTable<TData, TValue>({table, columns}: DataTableProps<TData, TValue>) {
+    return (
     <div className="rounded-md border w-full">
       <Table>
         <TableHeader>
@@ -100,6 +59,7 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
-    </div>
-  )
+    )
 }
+
+export default DataTable
