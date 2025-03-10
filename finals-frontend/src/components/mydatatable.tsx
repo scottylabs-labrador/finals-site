@@ -3,12 +3,12 @@
 import { SignInButton, useUser } from "@clerk/nextjs"
 import { getSchedule, postSchedule } from "@/lib/schedules"
 
-import { useQuery as tanUseQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery as tanUseQuery, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef, ColumnFiltersState, getCoreRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
 import ical from 'ical';
 import { FaSliders } from "react-icons/fa6";
 import DataTable from "./datatable";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
 
 
@@ -59,7 +59,7 @@ export function MyDataTable<TData, TValue>({
 
   const { data, isLoading } = tanUseQuery({ queryKey: ["schedule", user?.id], queryFn: async () => {
     const s = await getSchedule(user?.id)
-    myFinalsTable.getColumn("course_and_section")?.setFilterValue(s.map((c: any)=>c.code+""+c.section))
+    myFinalsTable.getColumn("course_and_section")?.setFilterValue(s.map((c: {code: string, section: string})=>c.code+""+c.section))
     return s;
 
   }
@@ -76,8 +76,8 @@ export function MyDataTable<TData, TValue>({
 
   const scheduleData: CourseData[] = data;
 
-  const handleFileChange = (event: any) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: FormEvent) => {
+    const file = (event.target as HTMLInputElement)?.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.readAsText(file);
@@ -117,39 +117,6 @@ export function MyDataTable<TData, TValue>({
     }
   };
 
-  const renderSchedule = () => {
-    const formatDate = (date: Date) => {
-      return `${new Date(date).getHours().toString().padStart(2, '0')}:${new Date(date).getMinutes().toString().padStart(2, '0')}`;
-    };
-
-    return (
-      <div className="h-96 space-y-3 overflow-auto pl-5 pr-2">
-        {scheduleData.map((course) => (
-          <button
-            key={course.code + course.dow}
-            className="w-full rounded border bg-gray-50 p-1 text-left hover:bg-gray-300"
-          >
-            <h3 className="truncate text-gray-700">
-              {course.code} {course.name}
-            </h3>
-            <div className="text-gray-500">
-              <div className="flex justify-between">
-                <p>Section {course.section}</p>
-                <p>{course.instructors}</p>
-              </div>
-              <div className="flex justify-between">
-                <p>
-                  {course.dow} {formatDate(course.start)}-
-                  {formatDate(course.end)}
-                </p>
-                <p>{course.room}</p>
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
-    );
-  };
 
   const renderFinals = () => {
     return <DataTable columns={columns} table={myFinalsTable} />

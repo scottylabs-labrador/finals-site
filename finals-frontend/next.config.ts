@@ -8,7 +8,7 @@ module.exports = {
         "fs": false,
         "path": false,
         "os": false,
-      }
+      },
     }
     return config
   },
