@@ -1,7 +1,5 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import { SearchTable } from "@/components/searchtable";
 import { ColumnDef } from "@tanstack/react-table";
 import { UserButton } from "@clerk/nextjs";
@@ -10,12 +8,14 @@ import { MyDataTable } from "@/components/mydatatable";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type FinalsInfo = {
-  _id: string;
   course: string;
   start_time: number;
   end_time: number;
   location: string;
 }
+
+import finals from "@/assets/finals.json" assert { type: "jsonl" }; 
+
 
 type FinalsDisplayData = {
   course_and_section: string;
@@ -28,8 +28,6 @@ type FinalsDisplayData = {
 const rootQueryClient = new QueryClient();
 
 export default function Home() {
-  const finals = useQuery(api.finals.get);
-
 
   if (!finals) {
     return (<>

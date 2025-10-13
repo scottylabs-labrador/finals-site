@@ -3,7 +3,7 @@
 import { SignInButton, useUser } from "@clerk/nextjs"
 import { getSchedule, postSchedule } from "@/lib/schedules"
 
-import { useQuery as tanUseQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import { ColumnDef, ColumnFiltersState, getCoreRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table";
 import ical from 'ical';
 import { FaSliders } from "react-icons/fa6";
@@ -43,8 +43,7 @@ export function MyDataTable<TData, TValue>({
   data: finalsData,
 }: DataTableProps<TData, TValue>) {
   const { user } = useUser();
-  const queryClient = useQueryClient();
-
+  const queryClient = new QueryClient();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const myFinalsTable = useReactTable({
     data: finalsData,
@@ -57,7 +56,7 @@ export function MyDataTable<TData, TValue>({
     },
   })
 
-  const { data, isLoading } = tanUseQuery({ queryKey: ["schedule", user?.id], queryFn: async () => {
+  const { data, isLoading } = useQuery({ queryKey: ["schedule", user?.id], queryFn: async () => {
     const s = await getSchedule(user?.id)
     myFinalsTable.getColumn("course_and_section")?.setFilterValue(s.map((c: {code: string, section: string})=>c.code+""+c.section))
     return s;
@@ -130,7 +129,7 @@ export function MyDataTable<TData, TValue>({
           <a
             target="_blank"
             rel="noreferrer"
-            href="https://s3.andrew.cmu.edu/sio/mpa/secure/export/schedule/F24_schedule.ics"
+            href="https://s3.andrew.cmu.edu/sio/mpa/secure/export/schedule/F25_schedule.ics"
           >
             <span className="text-blue-600 underline">Calendar Export</span>
           </a>{' '}
@@ -168,6 +167,15 @@ export function MyDataTable<TData, TValue>({
             className="hidden"
             onChange={handleFileChange}
           />
+        </label>
+        <label className="mb-1 mr-4 cursor-pointer rounded-md bg-green-600 px-2 py-1 font-medium text-white">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://s3.andrew.cmu.edu/sio/mpa/secure/export/schedule/F25_schedule.ics"
+          >
+            <span className="text-white-600 underline">SIO Export</span>
+          </a>
         </label>
       </div>
     );
