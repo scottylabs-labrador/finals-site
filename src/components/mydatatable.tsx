@@ -53,8 +53,10 @@ export function MyDataTable<TData, TValue>({
   useEffect(() => {
     const mySchedule = localStorage.getItem("mySchedule");
     const scheduleData: CourseData[] = mySchedule ? JSON.parse(mySchedule) : null;
-    setUserSchedule(scheduleData);
-    myFinalsTable.getColumn("course_and_section")?.setFilterValue(scheduleData.map((c: {code: string, section: string})=>c.code+""+c.section))
+    if (!!scheduleData) {
+      setUserSchedule(scheduleData);
+      myFinalsTable.getColumn("course_and_section")?.setFilterValue(scheduleData.map((c: {code: string, section: string})=>c.code+""+c.section))
+    }
   }, []);
 
   const handleFileChange = (event: FormEvent) => {
@@ -90,6 +92,7 @@ export function MyDataTable<TData, TValue>({
           newScheduleData.push(curCourse as CourseData);
         }
         setUserSchedule(newScheduleData);
+        myFinalsTable.getColumn("course_and_section")?.setFilterValue(newScheduleData.map((c: {code: string, section: string})=>c.code+""+c.section))
         localStorage.setItem("mySchedule", JSON.stringify(newScheduleData));
       };
     }
